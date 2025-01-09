@@ -1,0 +1,15 @@
+// src/api/ServiceApi.js
+
+const fetchEnvironmentalData = async () => {
+  try {
+    const response = await fetch("https://api.example.com/environmental-data");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching environmental data:", error);
+    return null;
+  }
+};
+
+// Ensure the function is exported correctly
+export default fetchEnvironmentalData; // Default export
