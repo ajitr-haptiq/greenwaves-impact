@@ -1,22 +1,26 @@
 import React from "react";
+import Slider from "../components/Slider/Slider";
+import NewsSlider from "../components/NewsSlider/NewsSlider";
+import EnvironmentalCharts from "../components/EnvironmentalCharts";
+import Campaigns from "../components/Campaigns";
 
 const Home = () => {
   return (
-    <div
-      className="w-full h-screen" // full width and screen height
+    <main
+      className="flex flex-col w-full" // Full viewport height
       style={{
-        backgroundImage: "url(/images/registerbackground.jpg)",
-        backgroundSize: "cover", // Ensure the image covers the entire area
-        backgroundPosition: "center", // Center the image
-        backgroundAttachment: "fixed", // Optional: Keeps the background fixed while scrolling
+        minHeight: "100vh",
+        backgroundImage: "url('/images/registerbackground.jpg')",
+        backgroundSize: "cover", // Ensures the image covers the full div
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed", // Keeps background static while scrolling
       }}
     >
-      <div className="flex items-center justify-center h-full">
-        <h1 className="text-white text-4xl font-bold">
-          Welcome to EcoPlatform
-        </h1>
-      </div>
-    </div>
+      <Slider />
+      <NewsSlider />
+      {/* <EnvironmentalCharts /> */}
+      {/* <Campaigns /> */}
+    </main>
   );
 };
 
