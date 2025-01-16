@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -30,15 +33,37 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    if (validate()) {
+
+    // Validate the form
+    if (!validate()) {
+      setMessage("Please fill in all fields.");
+      setMessageType("error");
+      return;
+    }
+
+    try {
+      // Send a POST request to the backend
+      const response = await axios.post(
+        "http://localhost:4001/api/auth/register",
+        form
+      );
+
+      // Handle successful registration
       setMessage("Registration successful!");
       setMessageType("success");
-      // Simulate API call
-      console.log(form);
-    } else {
-      setMessage("Please fill in all fields.");
+
+      // Redirect to the login page after 2 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 500);
+    } catch (error) {
+      // Handle registration error
+      setMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
       setMessageType("error");
     }
   };

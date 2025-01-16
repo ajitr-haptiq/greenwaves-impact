@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
   const handleChange = (e) => {
+    login(); //handling global login state
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -20,12 +24,27 @@ const Login = () => {
       );
       setMessage("Login successful.");
       setMessageType("success");
+
+      // Save the token to localStorage
       localStorage.setItem("token", response.data.token);
+
+      // Decode the token to get the user's role
+      const decodedToken = jwtDecode(response.data.token);
+      const userRole = decodedToken.role;
+      console.log("user role : ", userRole);
+
+      // Redirect based on the user's role
       setTimeout(() => {
-        navigate("/");
-      }, 2000);
+        if (userRole === "admin") {
+          navigate("/admin"); // Redirect to AdminHomePage
+        } else {
+          navigate("/"); // Redirect to Home
+        }
+      }, 500);
     } catch (error) {
-      setMessage(error.response.data.message);
+      setMessage(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
       setMessageType("error");
     }
   };
